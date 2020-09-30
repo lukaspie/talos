@@ -5,7 +5,7 @@ def scan_prepare(self):
 
     from .scan_utils import initialize_log
 
-    self._experiment_log = initialize_log(self)
+    self._experiment_log_csv, self._experiment_log_pkl = initialize_log(self)
 
     # for the case where x_val or y_val is missing when other is present
     self.custom_val_split = False

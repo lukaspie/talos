@@ -4,18 +4,26 @@ def initialize_log(self):
     import os
 
     # create the experiment folder (unless one is already there)
+    path = os.getcwd()
+    self.experiment_dir = os.path.join(path,
+                                       self.experiment_name)
     try:
-        path = os.getcwd()
-        os.mkdir(path + '/' + self.experiment_name)
+        os.mkdir(self.experiment_dir)
     except FileExistsError:
         pass
-
+    
     self._experiment_id = time.strftime('%D%H%M%S').replace('/', '')
-    _file_name = self._experiment_id + '.csv'
-    _experiment_log = './' + self.experiment_name + '/' + _file_name
-
-    f = open(_experiment_log, 'w')
-    f.write('')
-    f.close()
-
-    return _experiment_log
+    _csv_filename  = 'test_log_{}.csv'.format(self.number)
+    self._experiment_log_csv = os.path.join(self.experiment_dir,
+                                            _csv_filename)
+    _pkl_filename  = 'test_log_{}.pkl'.format(self.number)
+    self._experiment_log_pkl = os.path.join(self.experiment_dir,
+                                            _pkl_filename)
+    
+    with open(self._experiment_log_csv, 'w') as f:
+        f.write('') 
+    
+    with open(self._experiment_log_pkl, 'w') as f:
+        f.write('') 
+        
+    return self._experiment_log_csv, self._experiment_log_pkl

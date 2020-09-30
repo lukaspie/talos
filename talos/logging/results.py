@@ -30,11 +30,12 @@ def save_result(self):
 
     import numpy as np
 
-    np.savetxt(self._experiment_log,
+    np.savetxt(self._experiment_log_csv,
                self.result,
                fmt='%s',
                delimiter=',')
-
+    
+    self.result.to_pickle(self._experiment_log_pkl)
 
 def result_todf(self):
 

@@ -152,7 +152,8 @@ class Scan:
                  disable_progress_bar=False,
                  print_params=False,
                  clear_session=True,
-                 save_weights=True):
+                 save_weights=True,
+                 number = 0):
 
         self.x = x
         self.y = y
@@ -190,6 +191,8 @@ class Scan:
         self.clear_session = clear_session
         self.save_weights = save_weights
         # input parameters section ends
+        
+        self.number = number
 
         # start runtime
         from .scan_run import scan_run
