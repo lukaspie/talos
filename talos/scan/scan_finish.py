@@ -8,7 +8,7 @@ def scan_finish(self):
                                    'reduction_method', 'reduction_metric',
                                    'reduction_threshold', 'reduction_window',
                                    'experiment_name', 'round_history',
-                                   'number']
+                                   'number', 'experiment_dir']
 
     import time
     import pandas as pd
