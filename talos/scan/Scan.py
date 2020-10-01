@@ -193,7 +193,3 @@ class Scan:
         # input parameters section ends
         
         self.number = number
-
-        # start runtime
-        from .scan_run import scan_run
-        scan_run(self)

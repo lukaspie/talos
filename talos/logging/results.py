@@ -35,8 +35,15 @@ def save_result(self):
                fmt='%s',
                delimiter=',')
     
-    self.result.to_pickle(self._experiment_log_pkl)
-
+    if not self.first_round:
+        import pandas as pd
+        # create dataframe for results
+        cols = self.result[0]
+        data = pd.DataFrame(self.result[1:])
+        data.columns = cols
+        
+        data.to_pickle(self._experiment_log_pkl)
+    
 def result_todf(self):
 
     '''ADDS A DATAFRAME VERSION OF THE RESULTS TO THE CLASS OBJECT'''

@@ -4,7 +4,7 @@ def initialize_log(self):
     import os
 
     # create the experiment folder (unless one is already there)
-    path = os.getcwd()
+    path = os.path.join(os.getcwd(), 'param_tests')
     self.experiment_dir = os.path.join(path,
                                        self.experiment_name)
     try:

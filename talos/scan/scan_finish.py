@@ -1,14 +1,14 @@
 def scan_finish(self):
 
     attrs_final = ['data', 'x', 'y', 'learning_entropy', 'round_times',
-                   'params', 'saved_models', 'saved_weights', 'round_history']
+                   'params', 'saved_models', 'saved_weights', 'round_history',
+                   'number', 'experiment_dir']
 
     attrs_to_keep = attrs_final + ['random_method', 'grid_downsample',
                                    'reduction_interval', 'reduce_loss',
                                    'reduction_method', 'reduction_metric',
                                    'reduction_threshold', 'reduction_window',
-                                   'experiment_name', 'round_history',
-                                   'number', 'experiment_dir']
+                                   'experiment_name', 'round_history']
 
     import time
     import pandas as pd
