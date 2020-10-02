@@ -1,6 +1,4 @@
 def initialize_log(self):
-
-    import time
     import os
 
     # create the experiment folder (unless one is already there)
@@ -12,11 +10,10 @@ def initialize_log(self):
     except FileExistsError:
         pass
     
-    self._experiment_id = time.strftime('%D%H%M%S').replace('/', '')
-    _csv_filename  = 'test_log_{}.csv'.format(self.number)
+    _csv_filename  = 'test_log.csv'
     self._experiment_log_csv = os.path.join(self.experiment_dir,
                                             _csv_filename)
-    _pkl_filename  = 'test_log_{}.pkl'.format(self.number)
+    _pkl_filename  = 'test_log.pkl'
     self._experiment_log_pkl = os.path.join(self.experiment_dir,
                                             _pkl_filename)
     

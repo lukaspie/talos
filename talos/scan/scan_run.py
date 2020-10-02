@@ -9,8 +9,8 @@ def scan_run(self):
     self = scan_prepare(self)
 
     # initiate the progress bar
-    self.pbar = tqdm(total=len(self.param_object.param_index),
-                     disable=self.disable_progress_bar)
+    self.pbar = tqdm(total = len(self.param_object.param_index),
+                     disable = self.disable_progress_bar)
 
     # the main cycle of the experiment
     while True:
@@ -30,8 +30,8 @@ def scan_run(self):
     self.pbar.close()
 
     # finish
-    from ..logging.logging_finish import logging_finish
-    self = logging_finish(self)
+    #from ..logging.logging_finish import logging_finish
+    #self = logging_finish(self)
 
     from .scan_finish import scan_finish
     self = scan_finish(self)

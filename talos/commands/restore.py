@@ -6,51 +6,38 @@ class Restore:
     USE:
 
     diabetes = ta.Scan(x, y, p, input_model)
-    ta.Deploy(diabetes, 'diabetes')
-    ta.Restore('diabetes.zip')
+    ta.Deploy(diabetes.scan_dir)
+    ta.Restore(diabetes.scan_dir)
 
     '''
 
-    def __init__(self, path_to_zip):
-
-        from zipfile import ZipFile
-
+    def __init__(self, scan_dir):
+        import os
         import pandas as pd
         import numpy as np
+        
+        data_file = os.path.join(scan_dir, 'test_log.pkl') 
+        
+        detail_file = os.path.join(scan_dir, 'details.txt') 
+        params_file = os.path.join(scan_dir, 'params.npy')
+        weights_file = os.path.join(scan_dir, 'saved_weights.npy')
+        model_file = os.path.join(scan_dir, 'saved_models.txt') 
 
-        # create paths
-        self.path_to_zip = path_to_zip
-        self.extract_to = path_to_zip.replace('.zip', '')
-        self.package_name = self.extract_to.split('/')[-1]
-        self.file_prefix = self.extract_to + '/' + self.package_name
-
-        # extract the zip
-        # unpack_archive(self.path_to_zip, self.extract_to)
-        z = ZipFile(self.path_to_zip, mode='r')
-        z.extractall(self.extract_to)
-
+        self.data = pd.read_pickle(data_file)
+        
+        self.details = pd.read_csv(detail_file, 
+                                    header = None, 
+                                    squeeze = True, 
+                                    index_col = 0)
+        
         # add params dictionary
-        self.params = np.load(self.file_prefix + '_params.npy',
-                              allow_pickle=True).item()
-
-        # add experiment details
-        self.details = pd.read_csv(self.file_prefix + '_details.txt',
-                                   header=None)
-
-        # add x data sample
-        self.x = pd.read_csv(self.file_prefix + '_x.csv', header=None)
-
-        # add y data sample
-        self.y = pd.read_csv(self.file_prefix + '_y.csv', header=None)
-
-        # add model
-        from talos.utils.load_model import load_model
-        self.model = load_model(self.file_prefix + '_model')
-
-        # add results
-        self.results = pd.read_csv(self.file_prefix + '_results.csv')
-        self.results.drop('Unnamed: 0', axis=1, inplace=True)
-
-        # clean up
-        del self.extract_to, self.file_prefix
-        del self.package_name, self.path_to_zip
+        self.params = np.load(params_file,
+                              allow_pickle = True).item()
+        
+        self.saved_weights = np.load(weights_file,
+                                     allow_pickle = True)
+        
+        self.saved_models = []
+        with open(model_file, 'r') as modelfile:
+            for line in modelfile.readlines():
+                self.saved_models.append(line[:-1])

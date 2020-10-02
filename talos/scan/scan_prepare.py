@@ -21,26 +21,54 @@ def scan_prepare(self):
 
     # create the parameter object and move to self
     from ..parameters.ParamSpace import ParamSpace
-    self.param_object = ParamSpace(params=self.params,
-                                   param_keys=self._param_dict_keys,
-                                   random_method=self.random_method,
-                                   fraction_limit=self.fraction_limit,
-                                   round_limit=self.round_limit,
-                                   time_limit=self.time_limit,
-                                   boolean_limit=self.boolean_limit
-                                   )
+    self.param_object = ParamSpace(params = self.params,
+                                   param_keys = self._param_dict_keys,
+                                   random_method = self.random_method,
+                                   fraction_limit = self.fraction_limit,
+                                   round_limit = self.round_limit,
+                                   time_limit = self.time_limit,
+                                   boolean_limit = self.boolean_limit)
 
     # mark that it's a first round
     self.first_round = True
-
-    # create various stores
-    self.round_history = []
-    self.peak_epochs = []
-    self.epoch_entropy = []
-    self.round_times = []
-    self.result = []
+    
+    import pandas as pd
+    self.data = pd.DataFrame()
+    
     self.saved_models = []
-    self.saved_weights = []
+    self.saved_weights_list = []
+    
+    detail_attr = ['random_method', 'grid_downsample',
+                   'reduction_interval', 'reduce_loss',
+                   'reduction_method', 'reduction_metric',
+                   'reduction_threshold', 'reduction_window',
+                   'experiment_name']
+
+    out = {}
+    
+    for key in list(detail_attr.keys()):
+        out[key] = self.__dict__[key]
+
+    try:
+        out['x_shape'] = self.x.shape
+    # for the case when x is list
+    except AttributeError:
+        out['x_shape'] = 'list'
+
+    try:
+        out['y_shape'] = self.y.shape
+    except AttributeError:
+        out['y_shape'] = 'list'
+        
+    import datetime
+    import pytz
+    
+    start_time = datetime.datetime.now().astimezone(
+        pytz.timezone('Europe/Berlin')).strftime("%Y-%m-%d %H:%Mm")
+    out['start_time'] = start_time 
+    out['end_time'] = start_time
+
+    self.details = pd.Series(out) 
 
     # handle validation split
     from ..utils.validation_split import validation_split

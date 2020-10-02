@@ -4,24 +4,28 @@ def scan_round(self):
     on the level of execution of each round.'''
 
     import time
+    import datetime
+    import pytz
     import gc
+    import numpy as np
 
     # print round params
     if self.print_params is True:
         print(self.round_params)
 
     # set start time
-    round_start = time.strftime('%D-%H%M%S')
+    round_start = datetime.datetime.now().astimezone(
+        pytz.timezone('Europe/Berlin')).strftime("%Y-%m-%d %H:%Mm")
+
     start = time.time()
 
     # fit the model
     from ..model.ingest_model import ingest_model
-    self.model_history, self.round_model = ingest_model(self)
-    self.round_history.append(self.model_history.history)
+    model_history, round_model = ingest_model(self)
 
     # handle logging of results
     from ..logging.logging_run import logging_run
-    self = logging_run(self, round_start, start, self.model_history)
+    self = logging_run(self, round_start, start, model_history)
 
     # apply reductions
     from ..reducers.reduce_run import reduce_run
@@ -29,12 +33,14 @@ def scan_round(self):
 
     try:
         # save model and weights
-        self.saved_models.append(self.round_model.to_json())
+        self.saved_models.append(round_model.to_json())
 
         if self.save_weights:
-            self.saved_weights.append(self.round_model.get_weights())
+            self.saved_weights_list.append(round_model.get_weights())
+            self.saved_weights = np.array(self.saved_weights_list)
         else:
-            self.saved_weights.append(None)
+            self.saved_weights_list.append(None)
+            self.saved_weights = np.array(self.saved_weights_list)
 
     except AttributeError as e:
         # make sure that the error message is from torch

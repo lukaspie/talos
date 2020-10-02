@@ -8,7 +8,7 @@ def run_round_results(self, out):
     NOTE: The epoch level data will be dropped here each round.
 
     '''
-
+    
     self._round_epochs = len(list(out.history.values())[0])
 
     _round_result_out = [self._round_epochs]
@@ -20,29 +20,16 @@ def run_round_results(self, out):
     # record the round hyper-parameters
     for key in self.round_params.keys():
         _round_result_out.append(self.round_params[key])
-
+        
     return _round_result_out
 
 
 def save_result(self):
-
-    '''SAVES THE RESULTS/PARAMETERS TO A CSV SPECIFIC TO THE EXPERIMENT'''
-
-    import numpy as np
-
-    np.savetxt(self._experiment_log_csv,
-               self.result,
-               fmt='%s',
-               delimiter=',')
     
-    if not self.first_round:
-        import pandas as pd
-        # create dataframe for results
-        cols = self.result[0]
-        data = pd.DataFrame(self.result[1:])
-        data.columns = cols
-        
-        data.to_pickle(self._experiment_log_pkl)
+    '''SAVES THE RESULTS/PARAMETERS TO A CSV SPECIFIC TO THE EXPERIMENT'''
+    
+    self.data.to_csv(self._experiment_log_csv)
+    self.data.to_pickle(self._experiment_log_pkl)
     
 def result_todf(self):
 
