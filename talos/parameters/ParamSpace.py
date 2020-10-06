@@ -155,13 +155,10 @@ class ParamSpace:
         if self.time_limit is None:
             return True
 
-        stop = datetime.strptime(self.time_limit,
-                                 "%Y-%m-%d %H:%M").astimezone(
-                                     pytz.timezone('UTC'))
-        
-        local_datetime = datetime.now().replace(
-             tzinfo=pytz.utc).astimezone(
-                 pytz.timezone('Europe/Berlin'))
+        local = pytz.timezone('Europe/Berlin')
+        stop = local.localize(datetime.strptime(self.time_limit,
+                                                "%Y-%m-%d %H:%M"))
+        local_datetime = datetime.now(tz=local)
 
         return stop > local_datetime
     
