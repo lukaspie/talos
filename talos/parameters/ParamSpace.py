@@ -3,6 +3,7 @@ import inspect
 import numpy as np
 import itertools as it
 from datetime import datetime
+import pytz
 
 
 class ParamSpace:
@@ -154,10 +155,16 @@ class ParamSpace:
         if self.time_limit is None:
             return True
 
-        stop = datetime.strptime(self.time_limit, "%Y-%m-%d %H:%M")
+        stop = datetime.strptime(self.time_limit,
+                                 "%Y-%m-%d %H:%M").astimezone(
+                                     pytz.timezone('UTC'))
+        
+        local_datetime = datetime.now().replace(
+             tzinfo=pytz.utc).astimezone(
+                 pytz.timezone('Europe/Berlin'))
 
-        return stop > datetime.now()
-
+        return stop > local_datetime
+    
     def round_parameters(self):
 
         # permutations remain in index
