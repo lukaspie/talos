@@ -13,7 +13,10 @@ def scan_restore(self):
     weights_file = os.path.join(self.experiment_dir, 'saved_weights.npy')
     model_file = os.path.join(self.experiment_dir, 'saved_models.txt') 
 
-    self.data = pd.read_pickle(data_file)
+    try:
+        self.data = pd.read_pickle(data_file)
+    except EOFError:
+        self.data = pd.DataFrame()
     
     self.details = pd.read_csv(detail_file,
                                header = None,
