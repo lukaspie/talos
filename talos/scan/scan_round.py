@@ -15,7 +15,7 @@ def scan_round(self):
 
     # set start time
     round_start = datetime.datetime.now().astimezone(
-        pytz.timezone('Europe/Berlin')).strftime("%Y-%m-%d %H:%Mm")
+        pytz.timezone('Europe/Berlin')).strftime("%Y-%m-%d %H:%M")
 
     start = time.time()
 
@@ -49,11 +49,15 @@ def scan_round(self):
                 self.saved_models.append(self.round_model.state_dict())
             else:
                 self.saved_weights.append(None)
+                
+    # save all result files
+    from .scan_utils import save_details, save_models, save_weights
+    save_details(self)
+    save_models(self)
+    save_weights(self)
 
     # clear tensorflow sessions
     if self.clear_session is True:
-
-        del self.round_model
         gc.collect()
 
         # try TF specific and pass for everyone else

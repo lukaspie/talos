@@ -1,4 +1,4 @@
-def initialize_log(self):
+def initialize_log(self, write = True):
     import os
 
     # create the experiment folder (unless one is already there)
@@ -17,10 +17,38 @@ def initialize_log(self):
     self._experiment_log_pkl = os.path.join(self.experiment_dir,
                                             _pkl_filename)
     
-    with open(self._experiment_log_csv, 'w') as f:
-        f.write('') 
+    if write:
+        with open(self._experiment_log_csv, 'w') as f:
+            f.write('') 
     
-    with open(self._experiment_log_pkl, 'w') as f:
-        f.write('') 
+        with open(self._experiment_log_pkl, 'w') as f:
+            f.write('') 
         
     return self._experiment_log_csv, self._experiment_log_pkl
+    
+    
+def save_details(self):
+    import os
+    detail_file = os.path.join(self.experiment_dir, 'details.txt') 
+    self.details.to_csv(detail_file)
+
+def save_models(self):
+    import os
+    model_file = os.path.join(self.experiment_dir, 'saved_models.txt') 
+    with open(model_file, 'w') as file:
+        for listitem in self.saved_models:
+            file.write('%s\n' % listitem)
+    
+    
+def save_weights(self):
+    import os
+    import numpy as np
+    weights_file = os.path.join(self.experiment_dir, 'saved_weights')
+    np.save(weights_file, self.saved_weights)
+    
+    
+
+
+        
+        
+        

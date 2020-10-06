@@ -8,20 +8,19 @@ def run_round_results(self, out):
     NOTE: The epoch level data will be dropped here each round.
 
     '''
-    
-    self._round_epochs = len(list(out.history.values())[0])
+    round_result_out = {}
 
-    _round_result_out = [self._round_epochs]
+    round_result_out['round_epochs'] = len(list(out.history.values())[0])
 
     # record the last epoch result
-    for key in out.history.keys():
-        _round_result_out.append(out.history[key][-1])
+    for result_key in out.history.keys():
+        round_result_out[result_key] = out.history[result_key][-1]
 
     # record the round hyper-parameters
-    for key in self.round_params.keys():
-        _round_result_out.append(self.round_params[key])
+    for param_key in self.round_params.keys():
+        round_result_out[param_key] = self.round_params[param_key]
         
-    return _round_result_out
+    return round_result_out
 
 
 def save_result(self):
